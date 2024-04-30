@@ -5,7 +5,7 @@ import time
 
 # ГЕНЕРАЦИЯ КОМНАТЫ
 ##############
-def rand_room(x):
+def rand_room(x, FOOD_ROOM_AMOUNT):
     l = []
     for a in range(x):
         if a == 0 or a == (x - 1):
@@ -57,10 +57,25 @@ def create_room(generate_room):
             r.append(wall_up(generate_room))
 
         else:
-            r.append(rand_room(generate_room))
+            r.append(rand_room(generate_room, FOOD_ROOM_AMOUNT))
 
-    #r = relocate_bots(r, bots)
     return r
+
+def create_food_in_room(r, generate_room):
+    for l in range(1, len(r) - 1):
+        while (r[l].count('*') + r[l].count('&')) < int(FOOD_ROOM_AMOUNT / ROOM_SIZE):
+            rand_coord = rdm.randint(1,generate_room - 2)
+            if r[l][rand_coord] != '#' and r[l][rand_coord] != '*' and r[l][rand_coord] != '&':
+                r[l][rand_coord] = rdm.choice(['*', '*', '&', '*']) # Список для генерации комнаты
+    print('GOOD')
+    return r
+
+def food_count(r):
+    f = 0
+    for i in r:
+        f += (i.count('*') + i.count('&'))
+    return f
+
 
 # ПЕРЕМЕЩЕНИЕ БОТОВ
 ##############

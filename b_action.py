@@ -2,7 +2,7 @@ from gen_const import *
 import random as rdm
 from time import sleep as slp
 
-id_objects = ['&', '#', '@', '*', ' '] # ID объектов
+id_objects = ['Вольдемар', '&', '#', '@', '*', ' '] # ID объектов
 
 def step_overflow(step):
     if step > 63:
@@ -12,17 +12,18 @@ def step_overflow(step):
 def bot_action(room, coords, hp, brain, step, direction, make_time, bots_amount):
     global id_objects
     step = step_overflow(step)
+    make_time += 1
 
     if hp <= 0:
-        return room, coords, hp, brain, step, direction, make_time
+        return room, coords, hp, brain, step, direction, 0
 
 
     if make_time == MAKE_TIME_MAX:
         hp -= 1
-        return room, coords, hp, brain, step, direction, make_time
+        return room, coords, hp, brain, step, direction, 0
 
     if brain[step] <= 7:
-        room, coords, hp, brain, step, direction, make_time = bot_move(room, coords, hp, brain, step, direction, make_time)
+        room, coords, hp, brain, step, direction = bot_move(room, coords, hp, brain, step, direction)
         step = step_overflow(step)
         hp -= 1
 
@@ -35,7 +36,6 @@ def bot_action(room, coords, hp, brain, step, direction, make_time, bots_amount)
         step += bot_look(room, coords, direction)
 
         step = step_overflow(step)
-        make_time += 1
         return bot_action(room, coords, hp, brain, step, direction, make_time, bots_amount)
 
     elif brain[step] > 23 and brain[step] <= 31:
@@ -43,21 +43,18 @@ def bot_action(room, coords, hp, brain, step, direction, make_time, bots_amount)
 
         step += 1
         step = step_overflow(step)
-        make_time += 1
         return bot_action(room, coords, hp, brain, step, direction, make_time, bots_amount)
 
     elif brain[step] > 31:
         step += brain[step]
-
         step = step_overflow(step)
 
-        make_time += 1
         return bot_action(room, coords, hp, brain, step, direction, make_time, bots_amount)
 
-    return room, coords, hp, brain, step, direction, make_time
+    return room, coords, hp, brain, step, direction, 0
 
 
-def bot_move(room, coords, hp, brain, step, direction, make_time):
+def bot_move(room, coords, hp, brain, step, direction):
     global id_objects
 
     # Вверх
@@ -187,7 +184,7 @@ def bot_move(room, coords, hp, brain, step, direction, make_time):
             hp -= POISON_DAMAGE
             coords = [coords[0] - 1, coords[1] - 1]
 
-    return room, coords, hp, brain, step, direction, make_time
+    return room, coords, hp, brain, step, direction
 
 def bot_eat(room, coords, hp, brain, step, direction, make_time):
     global id_objects

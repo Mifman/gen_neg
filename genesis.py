@@ -19,11 +19,15 @@ def crossing_bots(bot1, bot2):
     point = rdm.randint(25,45)
     return bot1[point:] + bot2[:point]
 
-def generate_bots():
+def generate_bots(save=''):
     bots = []  # Список с ботами
 
     for i in range(POPULATION):
         bots.append(copy.deepcopy(create_bot()))
+
+    if save != '': # Если грузим поколения с сохранения...
+        for i in range(POPULATION):
+            bots[i].brain = save[i]
 
     return bots
 

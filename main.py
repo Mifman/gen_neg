@@ -12,21 +12,42 @@ from gen_const import *
 from gen_room import *
 from genesis import *
 
+### ЗАГРУЗКА СОХРАНЕНИЯ
+is_load_save = False
+save = input('Введите полное названия файла сохранения (оставьте пустым, чтобы не загружать)\n\n===>')
+if save != '':
+    is_load_save = True
+    save = str(open(save).read()).split('\n')
+    save = [(s.replace('[', '').replace(']', '').replace(' ', '')).split(',') for s in save] # Преобразование в список
+    save.pop(64)
+    save = [[int(i) for i in s] for s in save] # Преобразование каждого числа в тип int
+    print(save[0])
+
+###
+
 score = 0
 score_last = 0
 gen_step = 1
 score_best = 0
 room = create_room(ROOM_SIZE)
 room = create_food_in_room(room, ROOM_SIZE)
-bots = generate_bots()
+bots = generate_bots(save)
 room = relocate_bots(room, bots)
 food = food_count(room)
 
+count_for_save = 0 # Счётчик для сохранения прогресса
+
+
+
 while True:
+    count_for_save += 1
     save_bots = ''
     for i in bots:
         save_bots += str(i.brain) + '\n'
-    open('bots.txt', 'w').write(save_bots)
+
+    if count_for_save == SAVE_PROGRESS:
+        open('bots.txt', 'w').write(save_bots)
+        count_for_save = 0
 
     while len(bots) > POPULATION_LEFT:
         food_left = food_count(room)
@@ -56,7 +77,6 @@ while True:
 
         room = relocate_bots(room, bots)
         display_array(room, score, gen_step, bots, score_best, score_last)
-        #slp(0.12)
         score += 1
 
     gen_step += 1 # Обновляем номер поколения

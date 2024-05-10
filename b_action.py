@@ -277,6 +277,9 @@ def bot_eat(room, coords, hp, brain, step, direction, make_time):
             step += id_objects.index('*')
             room[coords[0] - 1][coords[1] - 1] = '*'
 
+    if hp > BOT_HP_MAX:
+        hp = BOT_HP_MAX
+
     return room, coords, hp, brain, step, direction, make_time
 
 def bot_look(room, coords, direction):

@@ -24,7 +24,7 @@ MAX_MUTATION = 8 # Максимум мутантов (минимум 1)
 
 MAX_MUTATION_BOT = 5 # Максимум мутаций в гене (минимум 1)
 
-FOOD_ROOM_AMOUNT = 425 # Количество еды на карте при старте (FOOD_ROOM_AMOUNT >= ROOM_SIZE)
+FOOD_ROOM_AMOUNT = 425 # Количество еды на карте при старте (FOOD_ROOM_AMOUNT <= ROOM_SIZE)
 
 SAVE_PROGRESS = 10 # Через сколько поколений сохранять прогресс (по умолч.: раз в 10 поколений)
 
